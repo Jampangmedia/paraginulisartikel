@@ -1,0 +1,714 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PARAGI NULIS ARTIKEL</title>
+  <style>
+    :root{
+      --sky:#bfefff;
+      --sky2:#eafaff;
+      --blue:#14a8e7;
+      --blue2:#0c86c6;
+      --navy:#06172d;
+      --navy2:#0b2447;
+      --ink:#10233f;
+      --muted:#667f98;
+      --line:rgba(12,134,198,.18);
+      --card:#fff;
+      --danger:#b42318;
+      --ok:#087443;
+      --shadow:0 22px 70px rgba(6,23,45,.12);
+      --soft:0 10px 30px rgba(6,23,45,.08);
+      --radius:28px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      min-height:100vh;
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+      color:var(--ink);
+      background:
+        radial-gradient(circle at 14% -8%,rgba(20,168,231,.25),transparent 36%),
+        radial-gradient(circle at 92% 3%,rgba(6,23,45,.12),transparent 28%),
+        linear-gradient(180deg,#f7fdff 0%,#eafaff 42%,#f8fdff 100%);
+    }
+    a{color:inherit}
+    button,input,textarea,select{font:inherit}
+    .app{width:min(1260px,calc(100% - 28px));margin:0 auto;padding:20px 0 36px}
+    .top{
+      position:sticky;top:0;z-index:20;
+      padding:12px 0;
+      backdrop-filter:blur(18px);
+      background:linear-gradient(180deg,rgba(247,253,255,.9),rgba(247,253,255,.66));
+    }
+    .top-card{
+      display:flex;align-items:center;justify-content:space-between;gap:16px;
+      padding:12px 14px;border-radius:26px;background:rgba(255,255,255,.76);
+      border:1px solid rgba(255,255,255,.86);box-shadow:var(--soft)
+    }
+    .brand{display:flex;align-items:center;gap:12px;min-width:0}
+    .logo{
+      width:46px;height:46px;border-radius:16px;display:grid;place-items:center;
+      color:#fff;background:linear-gradient(135deg,var(--blue),var(--navy));
+      font-weight:950;box-shadow:0 14px 30px rgba(20,168,231,.25)
+    }
+    .brand h1{font-size:16px;line-height:1.05;margin:0;font-weight:950;letter-spacing:.06em;text-transform:uppercase;color:var(--navy)}
+    .brand p{margin:3px 0 0;color:var(--muted);font-size:12px}
+    .tabs{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+    .tab{
+      border:1px solid var(--line);background:#fff;color:var(--navy);
+      padding:11px 13px;border-radius:999px;cursor:pointer;font-weight:850;font-size:13px;
+    }
+    .tab.active{background:linear-gradient(135deg,var(--navy),var(--blue2));color:#fff;border-color:transparent}
+    .hero{
+      margin:18px 0;
+      border-radius:34px;padding:28px;
+      background:
+        radial-gradient(circle at 90% 0%,rgba(20,168,231,.18),transparent 34%),
+        linear-gradient(180deg,#fff,#effbff);
+      border:1px solid rgba(20,168,231,.18);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .kicker{
+      display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;
+      background:#eafaff;border:1px solid rgba(20,168,231,.22);color:var(--blue2);
+      font-size:12px;font-weight:900;letter-spacing:.12em;text-transform:uppercase
+    }
+    .kicker:before{content:"";width:8px;height:8px;border-radius:50%;background:var(--blue);box-shadow:0 0 0 6px rgba(20,168,231,.15)}
+    .hero h2{margin:18px 0 10px;font-size:clamp(34px,6vw,64px);line-height:1;letter-spacing:-.065em;color:var(--navy)}
+    .hero p{max-width:820px;margin:0;color:#405a75;font-size:16px;line-height:1.75}
+    .panel{display:none}
+    .panel.active{display:block}
+    .grid{display:grid;grid-template-columns:minmax(320px,.95fr) minmax(360px,1.05fr);gap:16px;align-items:start}
+    .card{
+      border-radius:var(--radius);background:rgba(255,255,255,.78);
+      border:1px solid rgba(255,255,255,.86);box-shadow:var(--soft);padding:18px;
+    }
+    .card h3{margin:0 0 12px;color:var(--navy);font-size:22px;line-height:1.05;letter-spacing:-.04em}
+    .field{display:grid;gap:7px;margin:12px 0}
+    .field label{font-size:12px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;color:var(--blue2)}
+    input,textarea,select{
+      width:100%;border:1px solid var(--line);background:#fff;color:var(--ink);
+      border-radius:18px;padding:13px 14px;outline:none;
+    }
+    input:focus,textarea:focus,select:focus{border-color:var(--blue);box-shadow:0 0 0 5px rgba(20,168,231,.12)}
+    textarea{min-height:130px;resize:vertical;line-height:1.6}
+    .small{font-size:12px;color:var(--muted);line-height:1.55}
+    .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .three{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+    .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+    .btn{
+      border:0;border-radius:999px;padding:12px 15px;font-weight:900;cursor:pointer;
+      background:linear-gradient(135deg,var(--navy),var(--blue2));color:#fff;box-shadow:0 12px 26px rgba(6,23,45,.16)
+    }
+    .btn.secondary{background:#eafaff;color:var(--blue2);box-shadow:none;border:1px solid rgba(20,168,231,.22)}
+    .btn.danger{background:#fff;color:var(--danger);border:1px solid rgba(180,35,24,.18);box-shadow:none}
+    .output{
+      width:100%;min-height:420px;background:#07182e;color:#dff8ff;border:0;border-radius:22px;
+      padding:16px;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono",monospace;
+      font-size:12.5px;line-height:1.65;white-space:pre;overflow:auto
+    }
+    .preview{
+      background:#fff;border:1px solid rgba(20,168,231,.16);border-radius:24px;padding:18px;
+      max-height:720px;overflow:auto
+    }
+    .preview h1,.preview h2,.preview h3{color:#06172d;letter-spacing:-.04em}
+    .preview p{line-height:1.8;color:#29425f}
+    .meta-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .meta-box{background:#fff;border:1px solid var(--line);border-radius:20px;padding:14px}
+    .meta-box strong{display:block;color:var(--navy);margin-bottom:6px}
+    .meta-box code{word-break:break-word;color:#29425f}
+    .pill-row{display:flex;gap:8px;flex-wrap:wrap}
+    .pill{display:inline-flex;padding:8px 10px;border-radius:999px;background:#eafaff;color:var(--blue2);font-size:12px;font-weight:850;border:1px solid rgba(20,168,231,.18)}
+    .notice{border-left:5px solid var(--blue);border-radius:0 18px 18px 0;background:#eafaff;padding:14px;color:#29425f;line-height:1.65;margin:12px 0}
+    .lp-block{
+      border:1px solid var(--line);background:#fff;border-radius:20px;padding:14px;margin:12px 0;
+    }
+    .lp-block-head{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:8px}
+    .lp-block-head strong{color:var(--navy)}
+    .switch{display:flex;align-items:center;gap:8px;font-weight:800;color:var(--muted);font-size:13px}
+    .switch input{width:auto}
+    .count{font-size:11px;color:var(--muted);font-weight:800}
+    .footer-note{text-align:center;color:var(--muted);font-size:12px;margin:24px 0 0}
+    @media(max-width:920px){
+      .grid{grid-template-columns:1fr}
+      .meta-grid,.two,.three{grid-template-columns:1fr}
+      .top-card{align-items:flex-start;flex-direction:column}
+      .tabs{justify-content:flex-start}
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="top">
+      <div class="top-card">
+        <div class="brand">
+          <div class="logo">FW</div>
+          <div>
+            <h1>Fourthwall Local Tools</h1>
+            <p>Article Builder + Landing Page Builder — berjalan lokal di browser.</p>
+          </div>
+        </div>
+        <div class="tabs">
+          <button class="tab active" data-tab="article">Artikel</button>
+          <button class="tab" data-tab="landing">Landing Page</button>
+          <button class="tab" data-tab="help">Panduan</button>
+        </div>
+      </div>
+    </div>
+
+    <section class="hero">
+      <span class="kicker">Local Browser Tool</span>
+      <h2>Bangun Artikel & Landing Page Siap Paste</h2>
+      <p>
+        Tools ini tidak menyimpan data ke blog dan tidak mengirim data ke server. Semua diproses di browser Anda.
+        Output HTML dirancang ringan agar cocok ditempel ke Blogger Fourthwall.id.
+      </p>
+    </section>
+
+    <section id="article" class="panel active">
+      <div class="grid">
+        <div class="card">
+          <h3>Input Artikel</h3>
+          <div class="field">
+            <label>Judul Artikel</label>
+            <input id="aTitle" placeholder="Contoh: Teater 45 Menit dan Manusia yang Kehilangan Daya Duduk" />
+          </div>
+          <div class="two">
+            <div class="field">
+              <label>Penulis</label>
+              <input id="aAuthor" value="Admin Fourthwall.id" />
+            </div>
+            <div class="field">
+              <label>Label Utama</label>
+              <select id="aMainLabel">
+                <option>Panggung</option><option>Aktor</option><option>Tokoh</option><option>Kesadaran</option>
+                <option>Tubuh</option><option>Pertunjukan</option><option>Esai dan Opini</option><option>Bank Naskah</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label>Label Tambahan, pisahkan koma</label>
+            <input id="aLabels" placeholder="Aktor, Tubuh, Pertunjukan" />
+          </div>
+          <div class="field">
+            <label>URL Gambar Utama</label>
+            <input id="aImage" placeholder="https://..." />
+          </div>
+          <div class="field">
+            <label>Alt Gambar</label>
+            <input id="aAlt" placeholder="Gambar ilustrasi artikel Fourthwall.id" />
+          </div>
+          <div class="field">
+            <label>Artikel Mentah</label>
+            <textarea id="aRaw" style="min-height:260px" placeholder="Paste artikel mentah di sini. Pisahkan paragraf dengan enter kosong. Baris pendek bisa menjadi subjudul otomatis."></textarea>
+          </div>
+          <div class="two">
+            <div class="field">
+              <label>Internal Link 1</label>
+              <input id="aLink1" value="/search/label/Panggung" />
+            </div>
+            <div class="field">
+              <label>Teks Link 1</label>
+              <input id="aLinkText1" value="Panggung" />
+            </div>
+          </div>
+          <div class="two">
+            <div class="field">
+              <label>Internal Link 2</label>
+              <input id="aLink2" value="/search/label/Aktor" />
+            </div>
+            <div class="field">
+              <label>Teks Link 2</label>
+              <input id="aLinkText2" value="Aktor" />
+            </div>
+          </div>
+          <div class="actions">
+            <button class="btn" id="buildArticle">Bangun Artikel</button>
+            <button class="btn secondary" id="copyArticle">Copy HTML</button>
+            <button class="btn secondary" id="saveArticleLocal">Simpan Draft Lokal</button>
+            <button class="btn danger" id="clearArticle">Bersihkan</button>
+          </div>
+          <div class="notice">
+            Tempel output ke <strong>Blogger &gt; New Post &gt; HTML view</strong>. Jangan tempel di Compose view agar struktur tidak rusak.
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Output Artikel</h3>
+          <div class="meta-grid">
+            <div class="meta-box"><strong>Slug Rekomendasi</strong><code id="aSlug">-</code></div>
+            <div class="meta-box"><strong>Meta Description</strong><code id="aMeta">-</code></div>
+            <div class="meta-box"><strong>Label</strong><div class="pill-row" id="aLabelOut"></div></div>
+            <div class="meta-box"><strong>Checklist</strong><code id="aChecklist">Isi artikel dulu.</code></div>
+          </div>
+          <div class="actions">
+            <button class="btn secondary" id="toggleArticlePreview">Preview / Code</button>
+            <button class="btn secondary" id="copyMeta">Copy Meta</button>
+          </div>
+          <textarea id="aOutput" class="output" spellcheck="false"></textarea>
+          <div id="aPreview" class="preview" style="display:none"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="landing" class="panel">
+      <div class="grid">
+        <div class="card">
+          <h3>Input Landing Page</h3>
+          <div class="field">
+            <label>Nama Produk / Program</label>
+            <input id="lProduct" placeholder="Contoh: Bank Naskah Teater Fourthwall.id" />
+          </div>
+          <div class="field">
+            <label>Headline Utama</label>
+            <input id="lHeadline" placeholder="Contoh: Akses Naskah, Catatan, dan Arsip Pertunjukan dalam Satu Ruang" />
+          </div>
+          <div class="field">
+            <label>Subheadline</label>
+            <textarea id="lSub" placeholder="Jelaskan manfaat utama secara singkat."></textarea>
+          </div>
+          <div class="two">
+            <div class="field">
+              <label>CTA Utama</label>
+              <input id="lCtaText" value="Akses Sekarang" />
+            </div>
+            <div class="field">
+              <label>Link CTA</label>
+              <input id="lCtaUrl" value="/p/kontak-kami.html" />
+            </div>
+          </div>
+          <div class="two">
+            <div class="field">
+              <label>Harga / Nilai</label>
+              <input id="lPrice" placeholder="Gratis / Donasi sukarela / Rp ..." />
+            </div>
+            <div class="field">
+              <label>Deadline Countdown</label>
+              <input id="lDeadline" type="datetime-local" />
+            </div>
+          </div>
+          <div class="field">
+            <label>URL Gambar Hero / Flier</label>
+            <input id="lHeroImg" placeholder="https://..." />
+          </div>
+          <div class="field">
+            <label>Benefit, satu baris satu poin</label>
+            <textarea id="lBenefits" placeholder="Akses katalog naskah&#10;Ruang arsip seni pertunjukan&#10;Update berkala melalui WhatsApp"></textarea>
+          </div>
+          <div class="field">
+            <label>Image Grid, satu URL per baris</label>
+            <textarea id="lImages" placeholder="https://gambar-1.jpg&#10;https://gambar-2.jpg&#10;https://gambar-3.jpg"></textarea>
+          </div>
+          <div class="field">
+            <label>Testimoni, format: Nama | Isi Testimoni</label>
+            <textarea id="lTestimonials" placeholder="Pembaca Fourthwall | Tulisannya jernih dan membantu membaca panggung dengan cara baru.&#10;Aktor Muda | Arsip seperti ini membantu proses latihan."></textarea>
+          </div>
+          <div class="field">
+            <label>Notifikasi Pembeli / Aktivitas, satu baris satu notif</label>
+            <textarea id="lNotifs" placeholder="Seseorang baru saja mengakses Bank Naskah&#10;Pembaca dari Tasikmalaya membuka halaman arsip&#10;Donasi pembaca berhasil diterima"></textarea>
+          </div>
+
+          <div class="lp-block">
+            <div class="lp-block-head">
+              <strong>Blok Aktif</strong>
+              <span class="count">Pilih fitur landing</span>
+            </div>
+            <div class="three">
+              <label class="switch"><input type="checkbox" id="lUseCountdown" checked /> Countdown</label>
+              <label class="switch"><input type="checkbox" id="lUseGrid" checked /> Image Grid</label>
+              <label class="switch"><input type="checkbox" id="lUseThumbs" checked /> Thumbnail</label>
+              <label class="switch"><input type="checkbox" id="lUseNotif" checked /> Notifikasi</label>
+              <label class="switch"><input type="checkbox" id="lUseTesti" checked /> Testimoni</label>
+              <label class="switch"><input type="checkbox" id="lUseFlyer" checked /> Flier</label>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button class="btn" id="buildLanding">Bangun Landing</button>
+            <button class="btn secondary" id="copyLanding">Copy HTML</button>
+            <button class="btn secondary" id="saveLandingLocal">Simpan Draft Lokal</button>
+            <button class="btn danger" id="clearLanding">Bersihkan</button>
+          </div>
+          <div class="notice">
+            Output landing sudah membawa CSS kecil di dalam halaman. Cocok untuk ditempel ke <strong>Blogger Pages &gt; HTML view</strong>.
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Output Landing Page</h3>
+          <div class="meta-grid">
+            <div class="meta-box"><strong>Judul SEO</strong><code id="lSeoTitle">-</code></div>
+            <div class="meta-box"><strong>Meta Description</strong><code id="lMeta">-</code></div>
+          </div>
+          <div class="actions">
+            <button class="btn secondary" id="toggleLandingPreview">Preview / Code</button>
+            <button class="btn secondary" id="copyLandingMeta">Copy Meta</button>
+          </div>
+          <textarea id="lOutput" class="output" spellcheck="false"></textarea>
+          <div id="lPreview" class="preview" style="display:none"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="help" class="panel">
+      <div class="card">
+        <h3>Panduan Singkat</h3>
+        <div class="notice">
+          <strong>Tools ini lokal.</strong> Anda bisa menyimpan file HTML ini di laptop, buka dengan Chrome, lalu gunakan kapan saja tanpa login.
+        </div>
+        <h3>Alur Artikel</h3>
+        <p class="small">
+          Paste artikel mentah → klik Bangun Artikel → copy HTML → Blogger New Post → HTML view → paste.
+          Gunakan output Meta Description untuk kolom Search Description Blogger, dan gunakan label yang direkomendasikan.
+        </p>
+        <h3>Alur Landing Page</h3>
+        <p class="small">
+          Isi produk, CTA, benefit, gambar, testimoni, dan notifikasi → klik Bangun Landing → copy HTML → Blogger Pages → HTML view → paste.
+        </p>
+        <h3>Indexing</h3>
+        <p class="small">
+          Tools ini tidak memaksa Google/Facebook/Pinterest langsung mengindex. Yang benar: publish artikel, pastikan sitemap aktif,
+          lalu submit URL ke Google Search Console / Bing Webmaster / Facebook Sharing Debugger bila diperlukan.
+        </p>
+      </div>
+    </section>
+
+    <p class="footer-note">Fourthwall Local Tools — data diproses di browser Anda.</p>
+  </div>
+
+<script>
+(function(){
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s ?? '').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+  const clean = s => String(s ?? '').replace(/\r/g,'').trim();
+  const lines = s => clean(s).split('\n').map(x=>x.trim()).filter(Boolean);
+  const slugify = s => String(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,75);
+  const words = s => clean(s).split(/\s+/).filter(Boolean);
+
+  document.querySelectorAll('.tab').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+      document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+      btn.classList.add('active');
+      $(btn.dataset.tab).classList.add('active');
+    });
+  });
+
+  function splitParagraphs(raw){
+    return clean(raw).split(/\n\s*\n/).map(x=>x.trim()).filter(Boolean);
+  }
+
+  function isHeading(block){
+    const t = clean(block);
+    if(!t) return false;
+    if(t.length > 95) return false;
+    if(/[.!?]$/.test(t)) return false;
+    if(t.split(/\s+/).length > 12) return false;
+    return true;
+  }
+
+  function formatArticleBody(raw){
+    const blocks = splitParagraphs(raw);
+    let h2Count = 0;
+    return blocks.map((b,i)=>{
+      const text = clean(b);
+      if(isHeading(text) && i !== 0){
+        h2Count++;
+        return `<h2>${esc(text)}</h2>`;
+      }
+      if(/^["“].+["”]$/.test(text) || /^>/.test(text)){
+        return `<blockquote>${esc(text.replace(/^>\s*/,''))}</blockquote>`;
+      }
+      if(/^\s*[-*]\s+/m.test(text)){
+        const items = text.split('\n').map(x=>x.replace(/^\s*[-*]\s+/,'').trim()).filter(Boolean);
+        return `<ul>\n${items.map(it=>`  <li>${esc(it)}</li>`).join('\n')}\n</ul>`;
+      }
+      return `<p>${esc(text)}</p>`;
+    }).join('\n\n');
+  }
+
+  function makeMeta(text, title){
+    const first = splitParagraphs(text).find(p=>words(p).length > 8) || title || 'Fourthwall.id';
+    return clean(first).slice(0,155);
+  }
+
+  function makeConclusion(raw){
+    const ps = splitParagraphs(raw).filter(p=>words(p).length > 8);
+    const last = ps[ps.length-1] || ps[0] || 'Tulisan ini menjadi bagian dari catatan Fourthwall.id tentang seni, tubuh, panggung, tokoh, pertunjukan, dan peristiwa.';
+    return last;
+  }
+
+  function makeFaq(title, label){
+    return [
+      {
+        q:'Apa fokus utama tulisan ini?',
+        a:`Tulisan ini membaca ${title || 'peristiwa'} dalam konteks ${label || 'seni, tubuh, panggung, tokoh, pertunjukan, dan kesadaran'}.`
+      },
+      {
+        q:'Mengapa tulisan ini relevan untuk pembaca Fourthwall.id?',
+        a:'Karena tulisan ini membantu pembaca melihat seni dan budaya bukan hanya sebagai tontonan, tetapi sebagai pengalaman yang hidup.'
+      },
+      {
+        q:'Di mana saya bisa membaca tulisan terkait?',
+        a:'Pembaca dapat menelusuri label terkait dan tautan Baca Juga yang tersedia di dalam artikel.'
+      }
+    ];
+  }
+
+  function articleHTML(){
+    const title = clean($('aTitle').value);
+    const author = clean($('aAuthor').value) || 'Admin Fourthwall.id';
+    const mainLabel = clean($('aMainLabel').value);
+    const raw = clean($('aRaw').value);
+    const img = clean($('aImage').value);
+    const alt = clean($('aAlt').value) || `${title} - Fourthwall.id`;
+    const link1 = clean($('aLink1').value);
+    const linkText1 = clean($('aLinkText1').value) || 'Baca Juga';
+    const link2 = clean($('aLink2').value);
+    const linkText2 = clean($('aLinkText2').value) || 'Tulisan Terkait';
+    const labels = [mainLabel].concat(clean($('aLabels').value).split(',').map(x=>x.trim()).filter(Boolean));
+    const meta = makeMeta(raw,title);
+    const slug = slugify(title);
+    const conclusion = makeConclusion(raw);
+    const faq = makeFaq(title, mainLabel);
+    const body = formatArticleBody(raw);
+    const imgHTML = img ? `<figure>
+  <img src="${esc(img)}" alt="${esc(alt)}" loading="lazy" decoding="async" />
+</figure>\n\n` : '';
+
+    const faqHTML = faq.map(item=>`<details>
+  <summary>${esc(item.q)}</summary>
+  <p>${esc(item.a)}</p>
+</details>`).join('\n');
+
+    const schema = {
+      "@context":"https://schema.org",
+      "@type":"FAQPage",
+      "mainEntity":faq.map(item=>({
+        "@type":"Question",
+        "name":item.q,
+        "acceptedAnswer":{"@type":"Answer","text":item.a}
+      }))
+    };
+
+    const html = `<article class="fw-post-ready">
+${imgHTML}${body}
+
+<section class="fw-post-conclusion">
+  <h2>Kesimpulan</h2>
+  <p>${esc(conclusion)}</p>
+</section>
+
+<section class="fw-post-faq">
+  <h2>FAQ</h2>
+${faqHTML}
+</section>
+
+<section class="fw-post-related">
+  <h2>Baca Juga</h2>
+  <ul>
+    <li><a href="${esc(link1)}">${esc(linkText1)}</a></li>
+    <li><a href="${esc(link2)}">${esc(linkText2)}</a></li>
+    <li><a href="/p/bank-naskah.html">Bank Naskah Fourthwall.id</a></li>
+  </ul>
+</section>
+
+<section class="fw-post-author">
+  <h2>Penulis</h2>
+  <p><strong>${esc(author)}</strong></p>
+  <p>Fourthwall.id adalah ruang personal untuk menulis, membaca, dan mengarsipkan gagasan seputar seni, tubuh, panggung, tokoh, pertunjukan, dan peristiwa.</p>
+</section>
+
+<script type="application/ld+json">
+${JSON.stringify(schema,null,2).replace(/<\/script/gi,'<\\/script')}
+</script>
+</article>`;
+
+    return {html,meta,slug,labels};
+  }
+
+  $('buildArticle').addEventListener('click',()=>{
+    const r = articleHTML();
+    $('aOutput').value = r.html;
+    $('aPreview').innerHTML = r.html.replace(/<script[\s\S]*?<\/script>/gi,'');
+    $('aSlug').textContent = r.slug || '-';
+    $('aMeta').textContent = r.meta || '-';
+    $('aLabelOut').innerHTML = r.labels.map(l=>`<span class="pill">${esc(l)}</span>`).join('');
+    const wc = words($('aRaw').value).length;
+    $('aChecklist').textContent = `Jumlah kata: ${wc}. ${wc<400?'Sebaiknya tambah isi agar lebih kuat SEO.':'Panjang artikel cukup.'} Meta: ${r.meta.length}/155.`;
+  });
+
+  $('copyArticle').addEventListener('click',()=>copy($('aOutput').value,'HTML artikel disalin.'));
+  $('copyMeta').addEventListener('click',()=>copy($('aMeta').textContent,'Meta description disalin.'));
+  $('toggleArticlePreview').addEventListener('click',()=>{
+    const show = $('aPreview').style.display === 'none';
+    $('aPreview').style.display = show ? 'block' : 'none';
+    $('aOutput').style.display = show ? 'none' : 'block';
+  });
+  $('saveArticleLocal').addEventListener('click',()=>{
+    localStorage.setItem('fwArticleDraft', JSON.stringify({
+      title:$('aTitle').value,author:$('aAuthor').value,label:$('aMainLabel').value,labels:$('aLabels').value,
+      image:$('aImage').value,alt:$('aAlt').value,raw:$('aRaw').value
+    }));
+    alert('Draft artikel tersimpan di browser ini.');
+  });
+  $('clearArticle').addEventListener('click',()=>{
+    ['aTitle','aLabels','aImage','aAlt','aRaw'].forEach(id=>$(id).value='');
+    $('aOutput').value='';$('aPreview').innerHTML='';$('aSlug').textContent='-';$('aMeta').textContent='-';$('aLabelOut').innerHTML='';
+  });
+
+  function listHTML(text){ return lines(text).map(x=>`<li>${esc(x)}</li>`).join('\n'); }
+  function imageGridHTML(text){
+    const imgs = lines(text);
+    if(!imgs.length) return '';
+    return imgs.map((url,i)=>`<figure class="fw-lp-img"><img src="${esc(url)}" alt="Gambar landing ${i+1}" loading="lazy" decoding="async" /></figure>`).join('\n');
+  }
+  function testiHTML(text){
+    const arr = lines(text);
+    if(!arr.length) return '';
+    return arr.map(x=>{
+      const [name,...rest]=x.split('|');
+      return `<blockquote class="fw-lp-testi"><p>${esc(rest.join('|').trim() || x)}</p><cite>${esc((rest.length?name:'Pembaca Fourthwall.id').trim())}</cite></blockquote>`;
+    }).join('\n');
+  }
+  function notifHTML(text){
+    const arr = lines(text);
+    if(!arr.length) return '';
+    return arr.map((x,i)=>`<div class="fw-lp-notif ${i===0?'active':''}">● ${esc(x)}</div>`).join('\n');
+  }
+
+  function landingHTML(){
+    const product = clean($('lProduct').value) || 'Fourthwall.id';
+    const headline = clean($('lHeadline').value) || product;
+    const sub = clean($('lSub').value);
+    const cta = clean($('lCtaText').value) || 'Akses Sekarang';
+    const ctaUrl = clean($('lCtaUrl').value) || '#';
+    const price = clean($('lPrice').value);
+    const deadline = clean($('lDeadline').value);
+    const heroImg = clean($('lHeroImg').value);
+    const benefits = listHTML($('lBenefits').value);
+    const imgs = imageGridHTML($('lImages').value);
+    const testimonials = testiHTML($('lTestimonials').value);
+    const notifs = notifHTML($('lNotifs').value);
+
+    const useCountdown = $('lUseCountdown').checked && deadline;
+    const useGrid = $('lUseGrid').checked && imgs;
+    const useThumbs = $('lUseThumbs').checked && heroImg;
+    const useNotif = $('lUseNotif').checked && notifs;
+    const useTesti = $('lUseTesti').checked && testimonials;
+    const useFlyer = $('lUseFlyer').checked && heroImg;
+
+    const meta = (sub || headline).slice(0,155);
+
+    const html = `<style>
+.fw-lp{max-width:1080px;margin:0 auto;padding:28px 16px 130px;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;color:#10233f}
+.fw-lp-hero{position:relative;overflow:hidden;border-radius:34px;padding:clamp(24px,5vw,54px);background:radial-gradient(circle at 90% 0%,rgba(20,168,231,.2),transparent 34%),linear-gradient(180deg,#fff,#effbff);border:1px solid rgba(20,168,231,.18);box-shadow:0 22px 70px rgba(6,23,45,.12)}
+.fw-lp-kicker{display:inline-flex;padding:8px 12px;border-radius:999px;background:#eafaff;color:#0c86c6;border:1px solid rgba(20,168,231,.22);font-size:12px;font-weight:900;letter-spacing:.12em;text-transform:uppercase}
+.fw-lp h1{margin:18px 0 12px;font-size:clamp(38px,7vw,76px);line-height:1;letter-spacing:-.07em;color:#06172d}
+.fw-lp-lead{max-width:760px;color:#405a75;font-size:17px;line-height:1.75}
+.fw-lp-cta{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}.fw-lp-btn{display:inline-flex;align-items:center;justify-content:center;padding:14px 18px;border-radius:999px;background:linear-gradient(135deg,#06172d,#0c86c6);color:#fff;text-decoration:none;font-weight:900;box-shadow:0 16px 32px rgba(6,23,45,.18)}.fw-lp-price{display:inline-flex;padding:14px 18px;border-radius:999px;background:#eafaff;color:#0c86c6;font-weight:900;border:1px solid rgba(20,168,231,.18)}
+.fw-lp-section{margin-top:18px;border-radius:28px;padding:22px;background:rgba(255,255,255,.82);border:1px solid rgba(20,168,231,.14);box-shadow:0 12px 34px rgba(6,23,45,.07)}.fw-lp-section h2{margin:0 0 14px;color:#06172d;font-size:clamp(25px,4vw,38px);line-height:1.1;letter-spacing:-.045em}
+.fw-lp-benefits{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px;padding:0;margin:0;list-style:none}.fw-lp-benefits li{padding:14px;border-radius:18px;background:#eafaff;color:#29425f;font-weight:750;line-height:1.45}
+.fw-lp-flyer img,.fw-lp-img img{width:100%;height:auto;border-radius:24px;box-shadow:0 16px 40px rgba(6,23,45,.12)}.fw-lp-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}.fw-lp-img{margin:0}
+.fw-lp-countdown{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.fw-lp-time{border-radius:20px;padding:16px;text-align:center;background:linear-gradient(135deg,#06172d,#0c86c6);color:#fff}.fw-lp-time strong{display:block;font-size:28px}.fw-lp-time span{font-size:11px;text-transform:uppercase;letter-spacing:.1em}
+.fw-lp-testi{margin:10px 0;padding:16px;border-left:5px solid #14a8e7;border-radius:0 20px 20px 0;background:#eafaff}.fw-lp-testi p{margin:0 0 8px;color:#29425f;line-height:1.7}.fw-lp-testi cite{font-weight:900;color:#06172d}
+.fw-lp-notif-wrap{position:fixed;left:16px;bottom:96px;z-index:20;display:grid;gap:8px;max-width:340px}.fw-lp-notif{display:none;padding:12px 14px;border-radius:18px;background:#fff;border:1px solid rgba(20,168,231,.18);box-shadow:0 14px 38px rgba(6,23,45,.16);font-weight:800;color:#29425f}.fw-lp-notif.active{display:block}
+@media(max-width:640px){.fw-lp{padding:18px 12px 120px}.fw-lp-hero,.fw-lp-section{border-radius:24px}.fw-lp-countdown{grid-template-columns:repeat(2,1fr)}.fw-lp-notif-wrap{left:12px;right:12px;bottom:88px;max-width:none}}
+</style>
+
+<div class="fw-lp">
+  <section class="fw-lp-hero">
+    <span class="fw-lp-kicker">${esc(product)}</span>
+    <h1>${esc(headline)}</h1>
+    <p class="fw-lp-lead">${esc(sub)}</p>
+    <div class="fw-lp-cta">
+      <a class="fw-lp-btn" href="${esc(ctaUrl)}">${esc(cta)}</a>
+      ${price ? `<span class="fw-lp-price">${esc(price)}</span>` : ''}
+    </div>
+  </section>
+
+  ${useFlyer ? `<section class="fw-lp-section fw-lp-flyer"><h2>Flier</h2><img src="${esc(heroImg)}" alt="${esc(product)}" loading="lazy" decoding="async" /></section>` : ''}
+
+  ${benefits ? `<section class="fw-lp-section"><h2>Manfaat Utama</h2><ul class="fw-lp-benefits">${benefits}</ul></section>` : ''}
+
+  ${useCountdown ? `<section class="fw-lp-section"><h2>Countdown</h2><div class="fw-lp-countdown" data-deadline="${esc(deadline)}"><div class="fw-lp-time"><strong data-d>0</strong><span>Hari</span></div><div class="fw-lp-time"><strong data-h>0</strong><span>Jam</span></div><div class="fw-lp-time"><strong data-m>0</strong><span>Menit</span></div><div class="fw-lp-time"><strong data-s>0</strong><span>Detik</span></div></div></section>` : ''}
+
+  ${useGrid ? `<section class="fw-lp-section"><h2>Galeri</h2><div class="fw-lp-grid">${imgs}</div></section>` : ''}
+
+  ${useThumbs ? `<section class="fw-lp-section"><h2>Thumbnail Utama</h2><div class="fw-lp-grid"><figure class="fw-lp-img"><img src="${esc(heroImg)}" alt="Thumbnail ${esc(product)}" loading="lazy" decoding="async" /></figure></div></section>` : ''}
+
+  ${useTesti ? `<section class="fw-lp-section"><h2>Testimoni</h2>${testimonials}</section>` : ''}
+
+  <section class="fw-lp-section">
+    <h2>Ambil Langkah Sekarang</h2>
+    <p>${esc(sub || 'Silakan klik tombol di bawah untuk melanjutkan.')}</p>
+    <div class="fw-lp-cta"><a class="fw-lp-btn" href="${esc(ctaUrl)}">${esc(cta)}</a></div>
+  </section>
+</div>
+
+${useNotif ? `<div class="fw-lp-notif-wrap">${notifs}</div>` : ''}
+
+<script>
+(function(){
+  var cd=document.querySelector('.fw-lp-countdown');
+  if(cd){
+    var end=new Date(cd.getAttribute('data-deadline')).getTime();
+    function tick(){
+      var diff=Math.max(0,end-Date.now());
+      var d=Math.floor(diff/86400000),h=Math.floor(diff/3600000)%24,m=Math.floor(diff/60000)%60,s=Math.floor(diff/1000)%60;
+      cd.querySelector('[data-d]').textContent=d;cd.querySelector('[data-h]').textContent=h;cd.querySelector('[data-m]').textContent=m;cd.querySelector('[data-s]').textContent=s;
+    }
+    tick();setInterval(tick,1000);
+  }
+  var ns=[].slice.call(document.querySelectorAll('.fw-lp-notif'));
+  if(ns.length){
+    var i=0;setInterval(function(){ns.forEach(function(n){n.classList.remove('active')});i=(i+1)%ns.length;ns[i].classList.add('active')},4200);
+  }
+})();
+</script>`;
+
+    return {html,meta,title:headline};
+  }
+
+  $('buildLanding').addEventListener('click',()=>{
+    const r = landingHTML();
+    $('lOutput').value = r.html;
+    $('lPreview').innerHTML = r.html.replace(/<script[\s\S]*?<\/script>/gi,'');
+    $('lSeoTitle').textContent = r.title;
+    $('lMeta').textContent = r.meta;
+  });
+  $('copyLanding').addEventListener('click',()=>copy($('lOutput').value,'HTML landing disalin.'));
+  $('copyLandingMeta').addEventListener('click',()=>copy($('lMeta').textContent,'Meta landing disalin.'));
+  $('toggleLandingPreview').addEventListener('click',()=>{
+    const show = $('lPreview').style.display === 'none';
+    $('lPreview').style.display = show ? 'block' : 'none';
+    $('lOutput').style.display = show ? 'none' : 'block';
+  });
+  $('saveLandingLocal').addEventListener('click',()=>{
+    localStorage.setItem('fwLandingDraft', JSON.stringify({
+      product:$('lProduct').value,headline:$('lHeadline').value,sub:$('lSub').value,cta:$('lCtaText').value,url:$('lCtaUrl').value
+    }));
+    alert('Draft landing tersimpan di browser ini.');
+  });
+  $('clearLanding').addEventListener('click',()=>{
+    ['lProduct','lHeadline','lSub','lPrice','lHeroImg','lBenefits','lImages','lTestimonials','lNotifs'].forEach(id=>$(id).value='');
+    $('lOutput').value='';$('lPreview').innerHTML='';$('lSeoTitle').textContent='-';$('lMeta').textContent='-';
+  });
+
+  function copy(text,msg){
+    if(!text){ alert('Belum ada output untuk disalin.'); return; }
+    navigator.clipboard.writeText(text).then(()=>alert(msg || 'Disalin.'));
+  }
+
+  // auto-load draft local if available
+  try{
+    const ad = JSON.parse(localStorage.getItem('fwArticleDraft') || 'null');
+    if(ad){ $('aTitle').value=ad.title||''; $('aAuthor').value=ad.author||'Admin Fourthwall.id'; $('aMainLabel').value=ad.label||'Panggung'; $('aLabels').value=ad.labels||''; $('aImage').value=ad.image||''; $('aAlt').value=ad.alt||''; $('aRaw').value=ad.raw||''; }
+  }catch(e){}
+})();
+</script>
+</body>
+</html>
