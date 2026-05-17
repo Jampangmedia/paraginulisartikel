@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Fourthwall Local Tools — Article & Landing Builder</title>
+  <title>TULAS TULIS TULUS</title>
   <style>
     :root{
       --sky:#bfefff;
@@ -147,14 +147,14 @@
         <div class="brand">
           <div class="logo">FW</div>
           <div>
-            <h1>Fourthwall Local Tools</h1>
-            <p>Article Builder + Landing Page Builder — berjalan lokal di browser.</p>
+            <h1>PARAGI TULAS TULIS</h1>
+            <p>NGAHASILKEUN ARTIKEL SIAP POSTING KA BLOG.</p>
           </div>
         </div>
         <div class="tabs">
           <button class="tab active" data-tab="article">Artikel</button>
           <button class="tab" data-tab="landing">Landing Page</button>
-          <button class="tab" data-tab="help">Panduan</button>
+          <button class="tab" data-tab="help">CARANA KIEU</button>
         </div>
       </div>
     </div>
@@ -474,7 +474,15 @@
     const slug = slugify(title);
     const conclusion = makeConclusion(raw);
     const faq = makeFaq(title, mainLabel);
-    const body = formatArticleBody(raw);
+    // Jika artikel mentah diawali judul yang sama, buang agar tidak dobel.
+    const rawBlocks = splitParagraphs(raw);
+    const normalizedTitle = clean(title).toLowerCase();
+    const normalizedFirst = clean(rawBlocks[0] || '').toLowerCase();
+    const articleRaw = normalizedTitle && normalizedFirst === normalizedTitle
+      ? rawBlocks.slice(1).join('\n\n')
+      : raw;
+
+    const body = formatArticleBody(articleRaw);
     const imgHTML = img ? `<figure>
   <img src="${esc(img)}" alt="${esc(alt)}" loading="lazy" decoding="async" />
 </figure>\n\n` : '';
@@ -495,6 +503,8 @@
     };
 
     const html = `<article class="fw-post-ready">
+<h1>${esc(title)}</h1>
+
 ${imgHTML}${body}
 
 <section class="fw-post-conclusion">
