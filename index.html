@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>PARAGI NULIS ARTIKEL</title>
+  <title>Fourthwall Local Tools — Article & Landing Builder</title>
   <style>
     :root{
       --sky:#bfefff;
@@ -524,7 +524,7 @@ ${faqHTML}
 
 <script type="application/ld+json">
 ${JSON.stringify(schema,null,2).replace(/<\/script/gi,'<\\/script')}
-</script>
+<\/script>
 </article>`;
 
     return {html,meta,slug,labels};
@@ -668,7 +668,7 @@ ${useNotif ? `<div class="fw-lp-notif-wrap">${notifs}</div>` : ''}
     var i=0;setInterval(function(){ns.forEach(function(n){n.classList.remove('active')});i=(i+1)%ns.length;ns[i].classList.add('active')},4200);
   }
 })();
-</script>`;
+<\/script>`;
 
     return {html,meta,title:headline};
   }
